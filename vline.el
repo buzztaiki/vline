@@ -273,6 +273,9 @@ if `truncate-lines' is non-nil."
 	     (line-char (if compose-p vline-line-char ? ))
 	     (line-str (make-string 1 line-char))
 	     (visual-line-str line-str)
+	     (beginning-line (line-number-at-pos (window-start)))
+	     (end-line (line-number-at-pos (window-end)))
+	     (window-height (+ 1 (- end-line beginning-line)))
 	     (in-fringe-p (vline-into-fringe-p)))
 	(when face-p
 	  (setq line-str (propertize line-str 'face (vline-face nil)))
@@ -280,7 +283,7 @@ if `truncate-lines' is non-nil."
 	(goto-char (window-end nil t))
 	(vline-forward 0)
 	(while (and (not in-fringe-p)
-		    (< i (window-height))
+		    (< i window-height)
 		    (< i (length vline-overlay-table))
 		    (not (bobp)))
 	  (let ((cur-column (vline-move-to-column column t)))
